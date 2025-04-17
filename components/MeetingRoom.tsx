@@ -19,7 +19,9 @@ export default function MeetingRoom({roomid}:{roomid:string}) {
           const connection = socket?.socket;
           if(!connection) return;
           socketref.current = connection;
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          const stream = await navigator.mediaDevices.getUserMedia({ video: {
+            facingMode:"user"
+          }, audio: true });
           if (!stream) {
               console.log("stream not present");
               return;
