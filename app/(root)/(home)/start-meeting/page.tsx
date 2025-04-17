@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 export default function StartMeeting() {
@@ -7,7 +8,7 @@ export default function StartMeeting() {
   const [roomID, setroomID] = useState<string>("room-id-your-xyz");
   const [isprocessing, setisprocessing] = useState<boolean>(false);
   const [isValid, setisValid] = useState<boolean>(false);
-
+  const router=useRouter();
   async function handleRoomIdButtonClick() {
     setisprocessing(true);
     setTimeout(() => {
@@ -29,7 +30,7 @@ export default function StartMeeting() {
           <p className='capitalize fontlight text-[15px]'>Auto generate room ID</p>
         </div>
         <button className='w-full bg-blue-600 rounded-xl text-white flex items-center justify-center py-6 text-[30px] font-extrabold cursor-pointer' onClick={handleRoomIdButtonClick}>
-          {isprocessing ? <Image src={"/images/loader.svg"} alt='loader image here' width={40} height={40} className='animate-spin invert' /> : !isAuto ? "Validate Room ID" : "Auto Generate Room ID"}
+          {isprocessing ? <Image src={"/images/loader.svg"} alt='loader image here' width={40} height={40} className='animate-spin invert' /> : !isAuto ? "Validate Room ID" : "Generate Room ID"}
         </button>
 
         <div className='w-full' style={{ display: isValid ? "block" : "none" }}>
@@ -55,7 +56,9 @@ export default function StartMeeting() {
               </div>
             </section>
           </div>
-          <button className='w-full bg-blue-600 rounded-xl text-white flex items-center justify-center py-6 text-[30px] font-extrabold cursor-pointer capitalize'>
+          <button className='w-full bg-blue-600 rounded-xl text-white flex items-center justify-center py-6 text-[30px] font-extrabold cursor-pointer capitalize' onClick={()=>{
+            router.replace(`/meeting/${roomID}`)
+          }}>
             Start meeting
           </button>
         </div>

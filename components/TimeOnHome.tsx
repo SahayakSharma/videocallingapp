@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 
-export default function () {
+export default function TimeOnHome() {
     const [time,settime]=useState<string>("");
     
     const date=new Date().toLocaleDateString([],{
@@ -11,7 +11,6 @@ export default function () {
         year:'numeric',
         weekday:'long',
     })
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     useEffect(()=>{
         const now=new Date();
         settime(now.toLocaleTimeString([],{

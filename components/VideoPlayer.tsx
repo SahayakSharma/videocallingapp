@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react'
 
 export default function VideoPlayer({video,audio}:{video:MediaStream,audio:MediaStream | undefined}) {
@@ -14,12 +15,15 @@ export default function VideoPlayer({video,audio}:{video:MediaStream,audio:Media
         }
     },[video,audio])
   return (
-    <div style={{}}>
-        <video className='rounded-[14px] h-[280px] border-2 border-purple-600' ref={videoref} autoPlay playsInline muted={mute}></video>
+    <div>
+        <video className='rounded-[14px] h-fit border-2 border-purple-600' ref={videoref} autoPlay playsInline muted={mute}></video>
         {
             audio && <audio autoPlay playsInline ref={audioref}/>
         }
-        <button onClick={()=>setmute(!mute)}>{mute ? "unmute" : "mute"}</button>
+        <div className='relative bottom-[460px] left-[20px] gap-3 hidden'>
+            {audio?.getAudioTracks()[0].enabled ? <Image src={"/images/mic-on.svg"} alt="image here" width={20} height={20} className='invert'/> : <Image src={"/images/mic-off.svg"} alt="image here" width={20} height={20} className='invert'/>}
+            {video?.getVideoTracks()[0].enabled ? <Image src={"/images/cam-on.svg"} alt="image here" width={20} height={20} className='invert'/> : <Image src={"/images/cam-off.svg"} alt="image here" width={20} height={20} className='invert'/>}
+        </div>
     </div>
   )
 }

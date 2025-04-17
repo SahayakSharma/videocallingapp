@@ -24,7 +24,7 @@ export const sidebarRoautes:sidebarroutestype[]=[
         icon:"/images/headset.svg"
     },
     {
-        label:"Schedule Meeting",
+        label:"Schedule Meet",
         route:"/schedule-meeting",
         icon:"/images/schedule.svg"
     },
