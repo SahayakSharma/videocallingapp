@@ -16,7 +16,7 @@ export default function VideoPlayer({video,audio}:{video:MediaStream,audio:Media
     },[video,audio])
   return (
     <div>
-        <video className='rounded-[14px] h-fit border-2 border-purple-600' ref={videoref} autoPlay playsInline muted={mute}></video>
+        <video className='rounded-[14px] h-fit border-2 border-purple-600' ref={videoref} autoPlay playsInline muted></video>
         {
             audio && <audio autoPlay playsInline ref={audioref}/>
         }
