@@ -14,6 +14,7 @@ export const SocketProvider=({children}:{children:ReactNode})=>{
     useEffect(()=>{
         if(!socket){
             const connection=io("https://zincbackendhub.xyz/");
+            // const connection=io("http://localhost:3001");
             setsocket(connection);
             socketref.current=connection;
         }

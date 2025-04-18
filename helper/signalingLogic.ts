@@ -42,3 +42,10 @@ export function connectToPeer({ socket, peerid, localstream, othervideo, setothe
 
     return pc;
 }
+
+export async function leaveRoom() {
+    for(const peer in peers){
+        peers[peer].close();
+        delete peers[peer];
+    }
+}

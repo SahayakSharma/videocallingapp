@@ -80,8 +80,6 @@ export default function MeetingRoom({roomid}:{roomid:string}) {
               const newMap=new Map(videoMap);
               newMap.delete(userSocketId)
               setvideoMap(newMap);
-              peers[userSocketId].close();
-              delete peers[userSocketId];
           });
           return (() => {
               socketref.current?.disconnect();

@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { SignedIn ,UserButton } from '@clerk/nextjs'
 export default function Navbar() {
   return (
     <div className='w-full bg-dark-1 px-18 py-4 flex justify-between items-center'>
@@ -7,8 +7,9 @@ export default function Navbar() {
         <p>Zink</p>
       </section>
       <section>
-        <div className='w-[40px] h-[40px] bg-white rounded-full cursor-pointer' title='profile'>
-        </div>
+        <SignedIn>
+          <UserButton/>
+        </SignedIn>
       </section>
     </div>
   )
