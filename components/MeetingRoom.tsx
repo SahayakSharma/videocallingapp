@@ -53,13 +53,14 @@ export default function MeetingRoom({roomid}:{roomid:string}) {
   
   
           socketref.current?.on("answer", async ({ sender, sdp }: { sender: string, sdp: RTCSessionDescriptionInit }) => {
-              console.log("my state is : ", peers[sender].signalingState)
               await peers[sender].setRemoteDescription(new RTCSessionDescription(sdp));
           })
   
           socketref.current?.on("ice-candidates", async ({ sender, candidate }) => {
+            console.log("ice candidates received : ",candidate," from : ",sender)
               if (candidate && peers[sender]) {
                   await peers[sender].addIceCandidate(candidate);
+                  console.log("adding ice candidates")
               }
           })
   

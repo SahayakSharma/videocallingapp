@@ -6,7 +6,7 @@ const ICE_SERVERS = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
 
 export function connectToPeer({ socket, peerid, localstream, othervideo, setotheruservideo,videoMap,setvideoMap }: { socket: Socket | null, peerid: string, othervideo: MediaStream[], localstream: MediaStream, setotheruservideo: Dispatch<SetStateAction<MediaStream[]>>,videoMap:Map<string,{video:MediaStream | undefined,audio:MediaStream | undefined}>,setvideoMap:Dispatch<SetStateAction<Map<string,{video:MediaStream | undefined,audio:MediaStream | undefined}>>> }): RTCPeerConnection {
     if (socket === null) throw new Error("not connected")
-    const pc = new RTCPeerConnection();
+    const pc = new RTCPeerConnection(ICE_SERVERS);
 
     localstream.getTracks().forEach((track)=>{
         pc.addTrack(track,localstream);
