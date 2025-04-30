@@ -50,8 +50,6 @@ export default function MeetingRoom({roomid}:{roomid:string}) {
               console.log("user joined with id : ", userSocketId)
   
           })
-  
-  
           socketref.current?.on("answer", async ({ sender, sdp }: { sender: string, sdp: RTCSessionDescriptionInit }) => {
               await peers[sender].setRemoteDescription(new RTCSessionDescription(sdp));
           })

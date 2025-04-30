@@ -33,4 +33,9 @@ export const sidebarRoautes:sidebarroutestype[]=[
         route:"/recordings",
         icon:"/images/record.svg"
     },
+    {
+        label:"Messages",
+        route:"/messages",
+        icon:"/images/schedule.svg"
+    }
 ]

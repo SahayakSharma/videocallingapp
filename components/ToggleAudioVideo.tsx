@@ -52,7 +52,10 @@ export default function ToggleAudioVideo({localstream}:{localstream:MediaStream 
         <Image src={"/images/hang.svg"} alt='image here' width={50} height={50} className='invert cursor-pointer' title='Hang Up' onClick={()=>{
             if(socket){
                 leaveRoom();
-                localstream?.getTracks().forEach((track)=>track.stop());
+                if(localstream){
+                    localstream.getTracks().forEach((track)=>track.stop());
+                }
+                else console.log("no stream present")
                 socket.socket?.emit("hang-up",{userid:socket.socket?.id})
                 router.replace("/");
             }
