@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 
 export default function JoinMeeting() {
   const router=useRouter();
-  const [roomid,setroomid]=useState<String>("");
+  const [roomid,setroomid]=useState<string>("");
   const handleJoinRoom=()=>{
     router.push(`/meeting/${roomid}`);
   }
