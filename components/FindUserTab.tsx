@@ -1,6 +1,4 @@
 'use client'
-import { UserConfig } from '@/config/dbConfig/userConfig';
-import { useUser } from '@clerk/nextjs';
 import { DocumentData } from 'firebase/firestore'
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
@@ -8,12 +6,7 @@ import React, { useEffect, useState } from 'react'
 export default function FindUserTab() {
 
   const [users, setusers] = useState<DocumentData[]>([]);
-  useEffect(() => {
-    const temp = UserConfig.getinstance();
-    temp.getAllUsers().then((res) => {
-      setusers(res);
-    });
-  }, [])
+
   return (
     <div className='p-10'>
       <button className='px-3 py-1 bg-green-600 rounded-xl text-white font-bold capitalize'>back</button>

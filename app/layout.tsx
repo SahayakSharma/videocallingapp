@@ -6,7 +6,9 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-import { ClerkProvider } from "@clerk/nextjs";
+import AuthProvider from "@/context/authContext";
+import { ThemeProvider } from "@/context/themeContext";
+import ChildRootLayout from "@/components/childLayouts/ChildRootLayout";
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -23,15 +25,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
-
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-dark-2`}
-        >
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider>
+          <AuthProvider>
+            <ChildRootLayout>
+              {children}
+            </ChildRootLayout>
+          </AuthProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }

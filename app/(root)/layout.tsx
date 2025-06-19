@@ -1,16 +1,14 @@
 
 import { SocketProvider } from '@/context/socketProvider'
+import { UserProvider } from '@/context/UserContext'
 import React, { ReactNode } from 'react'
-import ChildRootLayout from './ChildRootLayout'
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
     <main className='w-[100%]'>
-      <SocketProvider>
-        <ChildRootLayout>
+        <SocketProvider>
           {children}
-        </ChildRootLayout>
-      </SocketProvider>
+        </SocketProvider>
     </main>
   )
 }
