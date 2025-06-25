@@ -5,6 +5,7 @@ import { useState } from "react";
 import ThemeButton from "./customComponents/ThemeButton";
 import { IoMdMale,IoMdFemale,IoMdTransgender } from "react-icons/io";
 import { useUser } from "@/context/UserContext";
+import { useAuth } from "@/context/authContext";
 type IUserInfo = {
     fullName: string,
     dob: Date,
@@ -22,7 +23,7 @@ export default function BasicUserInfo({userDetailsInit}:{userDetailsInit:({fullN
         phoneNumber: '',
         gender:''
     })
-
+    const {signOut}=useAuth();
     async function handleSubmitDetails(){
         userDetailsInit({fullName:userInfo.fullName,dob:userInfo.dob,phoneNumber:userInfo.phoneNumber,gender:userInfo.gender});
     }
@@ -52,6 +53,7 @@ export default function BasicUserInfo({userDetailsInit}:{userDetailsInit:({fullN
                     </div>
                 </div>
                 <ThemeButton text="Submit Details" onClickAction={handleSubmitDetails} className="font-medium text-xl my-10"/>
+                <p className="text-[12px] underline text-center cursor-pointer" onClick={signOut} style={{color:colors.textSecondary}}>Switch Account</p>
             </div>
         </main>
     )

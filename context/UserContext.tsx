@@ -34,13 +34,15 @@ export function UserProvider({children}:{children:ReactNode}){
             const docRef=doc(instance.getDb(),'Users',user.uid);
             const docSnap=await getDoc(docRef);
             if(!docSnap.exists()) setRecordNotSet(true);
+            else{
+                setUserDetails(docSnap.data());
+            }
             setLoading(false);
         }
         catch(err){
             console.log("error while fetching user.")
         }
     }
-
     async function userDetailsInit({fullName,dob,phoneNumber,gender}:{fullName:string,dob:Date,phoneNumber:string,gender:string}){
         setLoading(true);
         if(!user || !user.uid) return;
@@ -51,9 +53,9 @@ export function UserProvider({children}:{children:ReactNode}){
             dob:dob,
             phone_number:phoneNumber,
             gender:gender,
+            email:user?.email,
             created_at:serverTimestamp(),
             updated_at:serverTimestamp(),
-            friends:[]
         }
         try{
             userDetailsValidator({fullName,dob,gender,phoneNumber});

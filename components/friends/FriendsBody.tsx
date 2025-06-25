@@ -2,6 +2,8 @@
 import { useFriends } from "@/context/friendsContext"
 import MyFriends from "./menuItemsBody/MyFriends";
 import AddFriends from "./menuItemsBody/AddFriends";
+import MyRequets from "./menuItemsBody/MyRequests";
+import Updates from "./menuItemsBody/Updates";
 
 export default function FriendsBody(){
 
@@ -11,11 +13,11 @@ export default function FriendsBody(){
         case "my-friends":
             return <MyFriends/>
         case "my-requests":
-            return <p>These are my requests</p>
+            return <MyRequets/>
         case "add-friends":
             return <AddFriends/>
         case "updates":
-            return <p>These are updates</p>
+            return <Updates/>
     }
     return <p>Unknown Route</p>
 }
