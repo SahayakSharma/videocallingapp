@@ -1,19 +1,18 @@
 'use client'
+import { useMessages } from '@/context/messageContext'
 import React, { useState } from 'react'
-import ChatTabSidebar from './ChatTabSidebar'
-import FindUserTab from './FindUserTab';
-import ChatSidebarLoader from './ChatSidebarLoader';
-import ChatArea from './ChatArea';
+import RoomList from './messages/RoomList';
+import Messages from './messages/Messages';
+
 
 export default function ChatTab() {
+  const {myRooms,myRoomsFetched}=useMessages();
 
-  const [activeChat, setactiveChat] = useState<string | null>(null);
-  const [activeSidebar,setactiveSidebar]=useState<string>("chat");
-  const [sidebarLoader,setsidebarLoader]=useState<boolean>(false);
   return (
-    <div className=' flex h-full'>
-      {sidebarLoader ? <ChatSidebarLoader/> : activeSidebar==="chat" ? <ChatTabSidebar changeSidebar={setactiveSidebar} setactiveChat={setactiveChat} /> : <FindUserTab/>}
-      <ChatArea/>
-    </div>
+    !myRoomsFetched ? <p className='text-center py-52 font-medium text-xl'>Fetching your data...</p> : 
+    <main className='w-full min-h-screen flex flex-row'>
+      <RoomList/>
+      <Messages/>
+    </main>
   )
 }
