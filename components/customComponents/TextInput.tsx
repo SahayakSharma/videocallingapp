@@ -1,7 +1,7 @@
 import { useTheme } from "@/context/themeContext"
 import { ChangeEvent } from "react";
 
-export default function TextInput({placeholder,className,onChangeAction,type,value}:{placeholder?:string,className?:string,onChangeAction:(e:ChangeEvent<HTMLInputElement>)=>void,type?:string,value:any}){
+export default function TextInput({placeholder,className,onChangeAction,type,value}:{placeholder?:string,className?:string,onChangeAction:(e:ChangeEvent<HTMLInputElement>)=>void,type?:string,value:string|number}){
     const {colors}=useTheme();
 
     return(

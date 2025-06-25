@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { UserProvider } from '@/context/UserContext'
 import { useTheme } from '@/context/themeContext'
 
-export default function layout({ children }: { children: ReactNode }) {
+export default function HomeLayout({ children }: { children: ReactNode }) {
 
   const { user } = useAuth();
   const router = useRouter();

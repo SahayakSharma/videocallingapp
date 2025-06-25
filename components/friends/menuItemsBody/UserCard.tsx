@@ -95,7 +95,7 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
         rejecting: false
     })
     const {user}=useAuth();
-    const {userDetails}=useUser();handleRequestAccept
+    const {userDetails}=useUser();
     const {removeFromReceivedRequests}=useFriends();
     async function handleRequestAccept() {
         if (processing.accepting || processing.rejecting) return;
@@ -131,7 +131,7 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
                 associated_room_id:roomRef.id,
                 created_at:serverTimestamp()
             })
-            const initialMessageRef=await addDoc(collection(instance.getDb(),'Messages'),{
+            await addDoc(collection(instance.getDb(),'Messages'),{
                 room_id:roomRef.id,
                 payload:"The room was created",
                 sent_by:null,
