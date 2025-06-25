@@ -85,10 +85,21 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             const receivedRequestSusbcription = onSnapshot(query(collection(instance.getDb(), 'FriendRequests'), where('sender_id', '==', user?.uid)), doc => {
                 doc.docChanges().forEach(change => {
                     if (change.type == 'added' && myRequestsFetched) {
-                        const red = myRequests.receivedRequests.some(a => a.id = change.doc.id);
-                        if (!red) {
-                            setMyRequests(prev => ({ ...prev, receivedRequests: [{ id: change.doc.id, ...change.doc.data() }, ...prev.receivedRequests] }));
-                        }
+                        setMyRequests(prev => {
+                            const exists = prev.receivedRequests.some(
+                                req => req.id === change.doc.id     
+                            );
+
+                            if (exists) return prev;             
+
+                            return {
+                                ...prev,
+                                receivedRequests: [
+                                    { id: change.doc.id, ...change.doc.data() },
+                                    ...prev.receivedRequests
+                                ]
+                            };
+                        });
                     }
                 })
             })
@@ -117,15 +128,16 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             setMyFriendsFetched(true);
             const friendSubscription = onSnapshot(query(collection(instance.getDb(), 'Friends'), where('friends_id', 'array-contains', user?.uid)), (doc) => {
                 doc.docChanges().forEach((change) => {
-                    if (change.type === 'added' && myFriendsFetched) {
-                        const red = myFriends.some(a => a.id === change.doc.id);
-                        if (!red) {
-                            setMyFriends(prev => ([{ id: change.doc.id, ...change.doc.data() }, ...prev]));
-                        }
+                    if (change.type === 'added') {
+                        setMyFriends(prev => {
+                            const exists = prev.some(friend => friend.id === change.doc.id);
+                            if (exists) return prev;
+                            return [{ id: change.doc.id, ...change.doc.data() }, ...prev];
+                        });
                     }
                 })
             })
-            myFriendSusbcriptionRef.current=friendSubscription;
+            myFriendSusbcriptionRef.current = friendSubscription;
         }
         catch (err) {
             console.log("error while fetching friends")
@@ -143,11 +155,11 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             getAllUsers();
             getMyRequests();
 
-            return(()=>{
-                if(myFriendSusbcriptionRef.current){
+            return (() => {
+                if (myFriendSusbcriptionRef.current) {
                     myFriendSusbcriptionRef.current();
                 }
-                if(receivedRequestsRef.current){
+                if (receivedRequestsRef.current) {
                     receivedRequestsRef.current();
                 }
             })
