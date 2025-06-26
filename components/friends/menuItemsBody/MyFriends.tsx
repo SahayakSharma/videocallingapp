@@ -35,14 +35,16 @@ export default function MyFriends() {
                 <div className="w-[50%]">
                     <div className="flex px-5 py-3 rounded-3xl gap-3 items-center mb-10" style={{ backgroundColor: colors.inputBackground }}>
                         <IoIosSearch size={30} color={colors.textSecondary} />
-                        <input type="text" className="w-full outline-none text-xl font-light text-[15px] placeholder:capitalize" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="search by username"/>
+                        <input type="text" className="w-full outline-none text-xl font-light text-[15px] placeholder:capitalize" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="search by username" />
                     </div>
-                    {   myFriends.length===0 ? <NoFriends/> : 
-                        filteredFriends.length===0 ? <p className="text-center underline text-[13px]">No friends to show with this username</p> : 
-                        filteredFriends.map((friend, index) => {
-                            return <FriendCard friend={friend} key={index} />
-                        })
-                    }
+                    <div className="flex flex-col gap-3">
+                        {myFriends.length === 0 ? <NoFriends /> :
+                            filteredFriends.length === 0 ? <p className="text-center underline text-[13px]">No friends to show with this username</p> :
+                                filteredFriends.map((friend, index) => {
+                                    return <FriendCard friend={friend} key={index} />
+                                })
+                        }
+                    </div>
                 </div>
             </main>
     )

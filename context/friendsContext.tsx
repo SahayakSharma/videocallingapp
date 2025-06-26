@@ -82,9 +82,9 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
                 receivedRequests: received
             })
             setMyRequestsFetched(true);
-            const receivedRequestSusbcription = onSnapshot(query(collection(instance.getDb(), 'FriendRequests'), where('sender_id', '==', user?.uid)), doc => {
+            const receivedRequestSusbcription = onSnapshot(query(collection(instance.getDb(), 'FriendRequests'), where('receiver_id', '==', user?.uid),where('status','==','pending')), doc => {
                 doc.docChanges().forEach(change => {
-                    if (change.type == 'added' && myRequestsFetched) {
+                    if (change.type == 'added') {
                         setMyRequests(prev => {
                             const exists = prev.receivedRequests.some(
                                 req => req.id === change.doc.id     
