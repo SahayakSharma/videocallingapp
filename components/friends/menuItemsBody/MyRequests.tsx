@@ -12,17 +12,17 @@ export default function MyRequets(){
         <div className="p-10">
             <p className="font-medium text-xl" style={{color:colors.text}}>Received</p>
             <div className="w-[50%] py-5 flex flex-col gap-2">
-                {myRequests.receivedRequests.length > 0 ? myRequests.receivedRequests.map((req,index)=>{
+                {myRequests.receivedRequests.length > 0 ? myRequests.receivedRequests.map((req)=>{
                     return(
-                        <ReceivedRequestCard request={req} key={index}/>
+                        <ReceivedRequestCard request={req} key={req.id}/>
                     )
                 }) : <NoRequestsReceived/>}
             </div>
             <p className="font-medium text-xl" style={{color:colors.text}}>My Requests</p> 
             <div className="w-[50%] py-5 flex flex-col gap-2">
-                {myRequests.sentRequests.length > 0 ? myRequests.sentRequests.map((req,index)=>{
+                {myRequests.sentRequests.length > 0 ? myRequests.sentRequests.map((req)=>{
                     return(
-                        <SentRequestCard request={req} key={index}/>
+                        <SentRequestCard request={req} key={req.id}/>
                     )
                 }) : <NoRequestSent/>}
             </div>

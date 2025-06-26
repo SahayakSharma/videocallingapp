@@ -97,6 +97,7 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
     const {user}=useAuth();
     const {userDetails}=useUser();
     const {removeFromReceivedRequests}=useFriends();
+    
     async function handleRequestAccept() {
         if (processing.accepting || processing.rejecting) return;
         const instance = FirestoreConfig.getInstance();

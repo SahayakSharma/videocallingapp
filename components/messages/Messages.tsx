@@ -41,12 +41,6 @@ export default function Messages() {
                     gender: userDetails.gender
                 }
             }
-            const newDoc = await addDoc(collection(instance.getDb(), 'Messages'), payload)
-            const statePayload = {
-                ...payload,
-                created_at: new Date()
-            }
-            setRoomMessages(prev => ([...prev, { id: newDoc.id, ...payload }]))
             setMessage('')
         }
         catch (err) {
