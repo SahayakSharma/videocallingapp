@@ -4,7 +4,7 @@ import { useTheme } from "@/context/themeContext"
 import { FcGoogle } from "react-icons/fc";
 import { Poppins } from 'next/font/google';
 
-export const poppins = Poppins({
+const poppins = Poppins({
     subsets: ['latin'],
     weight: ['400', '500', '700'],
     variable: '--font-poppins',
