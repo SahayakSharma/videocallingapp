@@ -1,6 +1,6 @@
 import { FirestoreConfig } from "@/config/firestoreConfig";
 import { useMessages } from "@/context/messageContext"
-import { collection, DocumentData, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, DocumentData, getDoc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import SystemMessage, { ReceivedByMe, SentByMe } from "./IndividualMessage";
 import SendMessage from "./SendMessage";
@@ -38,9 +38,11 @@ export default function Messages() {
                 created_at: serverTimestamp(),
                 sender_details: {
                     full_name: userDetails.full_name,
-                    gender: userDetails.gender
+                    gender: userDetails.gender,
+                    photo_url:user?.photoURL
                 }
             }
+            const newMsgRef=await addDoc(collection(instance.getDb(),'Messages'),payload)
             setMessage('')
         }
         catch (err) {

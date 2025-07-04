@@ -5,6 +5,7 @@ import { useFriends } from "@/context/friendsContext";
 import { useTheme } from "@/context/themeContext"
 import { useUser } from "@/context/UserContext";
 import { addDoc, collection, doc, DocumentData, getDocs, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import Image from "next/image";
 import { useState } from "react";
 import { BsPersonCircle } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
@@ -25,11 +26,13 @@ export default function UserCard({ User }: { User: DocumentData }) {
             receiver_id: User?.id,
             sender_details: {
                 full_name: userDetails?.full_name,
-                gender: userDetails?.gender
+                gender: userDetails?.gender,
+                photo_url:user?.photoURL
             },
             receiver_details: {
                 full_name: User?.full_name,
-                gender: User?.gender
+                gender: User?.gender,
+                photo_url:User?.photo_url
             },
             created_at: serverTimestamp(),
             status: 'pending'
@@ -54,9 +57,9 @@ export default function UserCard({ User }: { User: DocumentData }) {
         }
     }
     return (
-        <main className="w-full px-10 py-5 rounded-md flex justify-between items-center" style={{ backgroundColor: colors.background }}>
+        <main className="w-full px-5 py-5 rounded-md flex justify-between items-center" style={{ backgroundColor: colors.background }}>
             <div className="h-full flex gap-7 items-center">
-                <BsPersonCircle size={50} />
+                {User.photo_url ? <Image src={User.photo_url} alt="image here" width={70} height={70} className="rounded-full"/>: <BsPersonCircle size={50} />}
                 <span>
                     <p className="font-medium text-xl">{User?.full_name}</p>
                     <p className="font-light text-[15px]" style={{ color: colors.secondary }}>{User?.gender}</p>
@@ -73,10 +76,11 @@ export default function UserCard({ User }: { User: DocumentData }) {
 
 export function SentRequestCard({ request }: { request: DocumentData }) {
     const { colors } = useTheme();
+    console.log(request)
     return (
         <main className="w-full px-10 py-5 rounded-md flex justify-between items-center" style={{ backgroundColor: colors.background }}>
             <div className="h-full flex gap-7 items-center">
-                <BsPersonCircle size={50} />
+                {request.receiver_details?.photo_url ? <Image src={request.receiver_details?.photo_url} alt="image here" width={70} height={70} className="rounded-full"/>: <BsPersonCircle size={50} />}
                 <span>
                     <p className="font-medium text-xl">{request.receiver_details?.full_name}</p>
                     <p className="font-light text-[15px]" style={{ color: colors.secondary }}>{request.receiver_details?.gender}</p>
@@ -114,7 +118,8 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
                 participants_details:{
                     [user?.uid]:{
                         full_name:userDetails.full_name,
-                        gender:userDetails.gender
+                        gender:userDetails.gender,
+                        photo_url:user?.photoURL
                     },
                     [request.sender_id]:request.sender_details
                 },
@@ -125,7 +130,8 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
                 friends_details:{
                     [user?.uid]:{
                         full_name:userDetails.full_name,
-                        gender:userDetails.gender
+                        gender:userDetails.gender,
+                        photo_url:user?.photoURL
                     },
                     [request.sender_id]:request.sender_details
                 },
@@ -164,7 +170,7 @@ export function ReceivedRequestCard({ request }: { request: DocumentData }) {
     return (
         <main className="w-full px-10 py-5 rounded-md flex justify-between items-center" style={{ backgroundColor: colors.background }}>
             <div className="h-full flex gap-7 items-center">
-                <BsPersonCircle size={50} />
+                {request.sender_details?.photo_url ? <Image src={request.sender_details?.photo_url} alt="image here" width={70} height={70} className="rounded-full"/>: <BsPersonCircle size={50} />}
                 <span>
                     <p className="font-medium text-xl">{request.sender_details?.full_name}</p>
                     <p className="font-light text-[15px]" style={{ color: colors.secondary }}>{request.sender_details?.gender}</p>

@@ -1,6 +1,7 @@
 import { useTheme } from "@/context/themeContext";
 import { toJsDate } from "@/helper/time";
 import { DocumentData } from "firebase/firestore";
+import Image from "next/image";
 
 export default function SystemMessage({message}:{message:DocumentData}){
     const {colors}=useTheme();
@@ -18,7 +19,8 @@ export function SentByMe({message}:{message:DocumentData}){
     const {colors}=useTheme();
 
     return(
-        <div className="flex w-full justify-end my-3">
+        <div className="flex w-full justify-end my-3 gap-2 items-center">
+            <Image src={message.sender_details.photo_url} alt="image here" width={20} height={10} className="rounded-full w-[25px] h-[25px]"/>
             <div className=" px-3 py-2 rounded-md  max-w-[50%] flex items-end gap-2" style={{backgroundColor:colors.chatBubbleSelf,color:colors.text}}>
                 <p className="text-[15px] font-normal">{message.payload}</p>
                 <p className="text-[11px] font-light">{toJsDate(message.crated_at).toISOString().slice(11,16)}</p>
@@ -32,11 +34,12 @@ export function ReceivedByMe({message}:{message:DocumentData}){
     const {colors}=useTheme();
 
     return(
-        <div className="flex w-full justify-start my-3">
+        <div className="flex w-full justify-start my-3 items-center gap-2">
             <div className=" px-3 py-2 rounded-md  max-w-[50%] flex items-end gap-2" style={{backgroundColor:colors.chatBubbleOther,color:colors.text}}>
                 <p className="text-[15px] font-normal">{message.payload}</p>
                 <p className="text-[11px] font-light">{toJsDate(message.crated_at).toISOString().slice(11,16)}</p>
             </div>
+            <Image src={message.sender_details.photo_url} alt="image here" width={20} height={10} className="rounded-full w-[25px] h-[25px]"/>
         </div>
     )
 }

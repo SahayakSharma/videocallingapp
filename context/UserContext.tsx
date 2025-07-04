@@ -54,6 +54,7 @@ export function UserProvider({children}:{children:ReactNode}){
             phone_number:phoneNumber,
             gender:gender,
             email:user?.email,
+            photo_url:user?.photoURL,
             created_at:serverTimestamp(),
             updated_at:serverTimestamp(),
         }

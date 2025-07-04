@@ -1,17 +1,20 @@
 import { useAuth } from "@/context/authContext";
 import { useTheme } from "@/context/themeContext";
 import { DocumentData } from "firebase/firestore";
+import Image from "next/image";
 import { BsPersonCircle } from "react-icons/bs";
 import { LuMessageSquareMore } from "react-icons/lu";
 import { MdReportGmailerrorred } from "react-icons/md";
 export default function FriendCard({ friend }: { friend: DocumentData }) {
     const { colors } = useTheme();
     const { user } = useAuth();
-
+    console.log(friend)
     return (
         <div className="p-5 rounded-md flex items-center justify-between " style={{ backgroundColor: colors.inputBackground, color: colors.text }}>
             <div className="flex gap-5 items-center">
-                <BsPersonCircle size={50} color={colors.text}/>
+                {
+                    friend.friends_id[0] === user?.uid ? <Image src={friend.friends_details[friend.friends_id[1]].photo_url} alt="image here" width={70} height={70} className="rounded-full"/> : <Image src={friend.friends_details[friend.friends_id[0]].photo_url} alt="image here" width={70} height={70} className="rounded-full"/>
+                }
                 {
                     friend.friends_id[0] === user?.uid ? <div>
                         <p className="font-medium text-[20px]">{friend.friends_details[friend.friends_id[1]].full_name}</p>
