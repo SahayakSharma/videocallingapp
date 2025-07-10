@@ -27,14 +27,26 @@ export default function SendMessage({message,setMessage,handleSendMessage}:{mess
         setSending(false);
     }
     
-    return(
-        <main className={`w-full h-[70px] flex gap-2 items-center ${poppins.className}`}>
-            <TextInput placeholder="Enter message to send" className="w-[90%] h-full" onChangeAction={(e)=>{setMessage(e.target.value)}} value={message}/>
-            <div className="w-[10%] h-full rounded-md flex items-center justify-center cursor-pointer" style={{backgroundColor:colors.primary,}} onClick={sendMessage }>
-                {
-                    sending ? <TbLoader3 size={30} color={colors.text} className="animate-spin"/> : <RiSendPlaneFill size={30} color={colors.text}/>
-                }
-            </div>
-        </main>
-    )
+    return (
+    <main className={`w-full h-[70px] px-3 flex items-center gap-3 border-t border-gray-200 ${poppins.className}`}>
+        <TextInput
+            placeholder="Enter message to send"
+            className="flex-1 h-[45px] rounded-md px-4 text-[15px]"
+            onChangeAction={(e) => setMessage(e.target.value)}
+            value={message}
+        />
+        <div
+            className="w-[45px] h-[45px] flex items-center justify-center rounded-md transition-all duration-150 active:scale-95 hover:opacity-90"
+            style={{ backgroundColor: colors.primary, cursor: "pointer" }}
+            onClick={sendMessage}
+        >
+            {
+                sending
+                    ? <TbLoader3 size={24} color={colors.text} className="animate-spin" />
+                    : <RiSendPlaneFill size={24} color={colors.text} />
+            }
+        </div>
+    </main>
+);
+
 }
