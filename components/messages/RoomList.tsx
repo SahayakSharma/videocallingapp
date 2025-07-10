@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/authContext";
 import { useMessages } from "@/context/messageContext";
-import { useTheme } from "@/context/themeContext"
+import { useTheme } from "@/context/themeContext";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
@@ -9,41 +9,65 @@ export default function RoomList() {
     const { myRooms, activeRoom, changeActiveRoom } = useMessages();
     const active = useSearchParams();
     const { user } = useAuth();
+
     return (
-        <div className="w-[30%] p-5 flex flex-col gap-2" style={{ backgroundColor: colors.chatBubbleSelf }}>
+        <div
+            className="w-[30%] p-5 flex flex-col gap-4 overflow-y-auto"
+            style={{ backgroundColor: colors.chatBubbleSelf }}
+        >
             {
                 myRooms.map((room, index) => {
+                    const isActive = activeRoom === room.id;
+                    const isOneToOne = room.room_type === 'one-to-one';
+                    const otherUserId = isOneToOne && room.participants_id.find((id:string) => id !== user?.uid);
+                    const otherUser = isOneToOne && otherUserId ? room.participants_details[otherUserId] : null;
+
                     return (
-                        <div className="rounded-md p-5 cursor-pointer border-[1px] flex gap-7 items-center" key={index} style={{ backgroundColor: activeRoom === room.id ? colors.primary : '', borderColor: colors.border }} onClick={() => changeActiveRoom(room.id)}>
+                        <div
+                            key={index}
+                            onClick={() => changeActiveRoom(room.id)}
+                            className={`rounded-lg px-4 py-3 cursor-pointer flex gap-4 items-center border transition-all duration-200 ${
+                                isActive ? 'shadow-md scale-[1.02]' : 'hover:scale-[1.01]'
+                            }`}
+                            style={{
+                                backgroundColor: isActive ? colors.primary : '',
+                                borderColor: colors.border,
+                            }}
+                        >
                             {
-                                room.room_type === 'one-to-one' ?
-                                    room.participants_id[0] === user?.uid ?
-                                        <Image src={room.participants_details[room.participants_id[1]].photo_url} alt="image here" width={70} height={70} className="rounded-full" /> :
-                                        <Image src={room.participants_details[room.participants_id[0]].photo_url} alt="image here" width={70} height={70} className="rounded-full" />
-                                    : null
+                                isOneToOne && otherUser && (
+                                    <Image
+                                        src={otherUser.photo_url}
+                                        alt="User Avatar"
+                                        width={60}
+                                        height={60}
+                                        className="rounded-full ring-2 ring-gray-200"
+                                    />
+                                )
                             }
-                            <div>
-                                <p className="font-bold text-xl" style={{ color: colors.text }}>{
-                                    room.room_type === 'one-to-one' ?
-                                        room.participants_id[0] === user?.uid ?
-                                            room.participants_details[room.participants_id[1]].full_name :
-                                            room.participants_details[room.participants_id[0]].full_name :
-                                        room.room_name
-                                }</p>
-                                <p className="font-light" style={{ color: colors.text }}>
+
+                            <div className="flex flex-col justify-center">
+                                <p
+                                    className="font-semibold text-lg leading-tight"
+                                    style={{ color: colors.text }}
+                                >
                                     {
-                                        room.room_type === 'one-to-one' ?
-                                            room.participants_id[0] === user?.uid ?
-                                                room.participants_details[room.participants_id[1]].gender :
-                                                room.participants_details[room.participants_id[0]].gender :
-                                            'Group'
+                                        isOneToOne && otherUser ? otherUser.full_name : room.room_name
+                                    }
+                                </p>
+                                <p
+                                    className="text-sm text-gray-500"
+                                    style={{ color: colors.text }}
+                                >
+                                    {
+                                        isOneToOne && otherUser ? otherUser.gender : 'Group'
                                     }
                                 </p>
                             </div>
                         </div>
-                    )
+                    );
                 })
             }
         </div>
-    )
+    );
 }

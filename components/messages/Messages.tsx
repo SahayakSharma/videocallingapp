@@ -1,13 +1,16 @@
 import { FirestoreConfig } from "@/config/firestoreConfig";
 import { useMessages } from "@/context/messageContext"
-import { collection, DocumentData, getDoc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, DocumentData, getDoc, getDocs, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import SystemMessage, { ReceivedByMe, SentByMe } from "./IndividualMessage";
+import { LuMessagesSquare } from "react-icons/lu";
 import SendMessage from "./SendMessage";
 import { addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/authContext";
 import { useUser } from "@/context/UserContext";
 import { Poppins } from 'next/font/google';
+import Image from "next/image";
+import { TbLoader3 } from "react-icons/tb";
 
 export const poppins = Poppins({
     subsets: ['latin'],
@@ -20,14 +23,16 @@ export default function Messages() {
     const [loading, setLoading] = useState<boolean>(true)
     const { activeRoom } = useMessages();
     const [roomMessages, setRoomMessages] = useState<DocumentData[]>([]);
+    const [roomDetails, setRoomDetails] = useState<DocumentData>()
+    const [roomDetailsFetched, setRoomDetailsFetched] = useState<boolean>(false)
     const [message, setMessage] = useState<string>('');
     const { user } = useAuth();
     const { userDetails } = useUser();
     const bottomRef = useRef<HTMLDivElement>(null);
     const loadingRef = useRef<boolean>(null);
     const listenOnRoomsRef = useRef<() => void>(() => { })
-
     async function handleSendMessage() {
+        if (message == '') return;
         const instance = FirestoreConfig.getInstance();
         try {
             const payload = {
@@ -39,10 +44,10 @@ export default function Messages() {
                 sender_details: {
                     full_name: userDetails.full_name,
                     gender: userDetails.gender,
-                    photo_url:user?.photoURL
+                    photo_url: user?.photoURL
                 }
             }
-            const newMsgRef=await addDoc(collection(instance.getDb(),'Messages'),payload)
+            const newMsgRef = await addDoc(collection(instance.getDb(), 'Messages'), payload)
             setMessage('')
         }
         catch (err) {
@@ -83,6 +88,22 @@ export default function Messages() {
     useEffect(() => {
 
         const instance = FirestoreConfig.getInstance();
+        (async () => {
+            if (activeRoom != "") {
+                try {
+                    setRoomDetailsFetched(false)
+                    const docSnap = await getDoc(doc(collection(instance.getDb(), 'Rooms'), activeRoom))
+                    if (docSnap.exists()) {
+                        setRoomDetails(docSnap.data());
+                    }
+                    setRoomDetailsFetched(true)
+                }
+                catch (err) {
+                    console.log("error while fetching room details", err);
+                }
+            }
+
+        })()
         getRoomMessages();
 
         return (() => {
@@ -97,28 +118,80 @@ export default function Messages() {
     }, [roomMessages]);
 
     return (
-        activeRoom === '' ?
-            <div className="w-[70%]">
-                <p className="font-medium text-xl text-center py-52">Select a chat to see messages</p>
-            </div> :
-            loading ? <div className="w-[70%]">
-                <p className="font-medium text-xl text-center py-52">Loading...</p>
-            </div> :
-                <main className="w-[70%] p-5 flex flex-col">
-                    <div className={`flex-1 overflow-y-scroll pr-5 ${poppins.className}`}>
-                        {
-                            roomMessages.map((message, index) => (
-                                <div key={index} className="">
+        activeRoom === '' ? (
+            <div className="w-[70%] flex flex-col items-center justify-center h-full text-center px-6 pt-52">
+                <LuMessagesSquare size={80} className="text-gray-400 mb-4" />
+                <h2 className="text-xl font-semibold text-gray-700">No Chat Selected</h2>
+                <p className="text-sm text-gray-500 mt-2">Select a chat from the sidebar to view messages here.</p>
+            </div>
+        ) : loading ? (
+            <div className="w-[70%] flex flex-col items-center justify-center h-full text-center px-6 pt-52">
+                <TbLoader3 size={50} className="text-blue-500 animate-spin mb-4" />
+                <h2 className="text-xl font-semibold text-gray-700">Loading Chat...</h2>
+                <p className="text-sm text-gray-500 mt-2">Please wait while we fetch your messages.</p>
+            </div>
+        ) : (
+            <main className="w-[70%] px-5 pb-5 flex flex-col items-center">
+                {
+                    (roomDetails?.participants_id[0] === user?.uid || roomDetails?.participants_id[1] === user?.uid) && (
+                        <div className="w-full border-b border-gray-300 flex gap-4 p-5 items-center">
+                            <Image
+                                src={
+                                    roomDetails?.participants_id[0] === user?.uid
+                                        ? roomDetails?.participants_details[roomDetails?.participants_id[1]].photo_url
+                                        : roomDetails?.participants_details[roomDetails?.participants_id[0]].photo_url
+                                }
+                                alt="User avatar"
+                                width={50}
+                                height={50}
+                                className="rounded-full object-cover"
+                            />
+                            <div>
+                                <p className="font-semibold text-xl text-gray-800">
                                     {
-                                        message.type === 'system_generated' ? <SystemMessage message={message} /> :
-                                            message.sent_by === user?.uid ? <SentByMe message={message} /> : <ReceivedByMe message={message} />
+                                        roomDetails?.participants_id[0] === user?.uid
+                                            ? roomDetails?.participants_details[roomDetails?.participants_id[1]].full_name
+                                            : roomDetails?.participants_details[roomDetails?.participants_id[0]].full_name
                                     }
-                                </div>
-                            ))
-                        }
-                        <div ref={bottomRef}></div>
-                    </div>
-                    <SendMessage message={message} setMessage={setMessage} handleSendMessage={handleSendMessage} />
-                </main>
-    )
+                                </p>
+                                <p className="text-sm text-gray-500 px-1">
+                                    {
+                                        roomDetails?.participants_id[0] === user?.uid
+                                            ? roomDetails?.participants_details[roomDetails?.participants_id[1]].gender
+                                            : roomDetails?.participants_details[roomDetails?.participants_id[0]].gender
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    )
+                }
+
+                <div className={`flex-1 w-full overflow-y-scroll pr-4 pt-5 space-y-2 ${poppins.className}`}>
+                    {
+                        roomMessages.map((message, index) => (
+                            <div key={index}>
+                                {
+                                    message.type === 'system_generated' ? (
+                                        <SystemMessage message={message} />
+                                    ) : message.sent_by === user?.uid ? (
+                                        <SentByMe message={message} />
+                                    ) : (
+                                        <ReceivedByMe message={message} />
+                                    )
+                                }
+                            </div>
+                        ))
+                    }
+                    <div ref={bottomRef}></div>
+                </div>
+
+                <SendMessage
+                    message={message}
+                    setMessage={setMessage}
+                    handleSendMessage={handleSendMessage}
+                />
+            </main>
+        )
+    );
+
 }

@@ -23,11 +23,11 @@ export const homeCards:homecardtype[]=[
         route:"/join-meeting",
     },
     {
-        title:"Schedule Meeting",
+        title:"Messages",
         color:"#FFD09B",
-        description:"Schedule a meeting for later",
-        icon:"/images/schedule.svg",
-        route:"/schedule-meeting"
+        description:"Chat with your friends securely",
+        icon:"/images/message.svg",
+        route:"/messages"
     },
     {
         title:"History",

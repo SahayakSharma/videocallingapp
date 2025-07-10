@@ -23,29 +23,50 @@ export default function MyFriends() {
                 return friend.person_two_details.full_name.toLowerCase().includes(searchQuery);
             }
             else {
-                return friend.person_one_details.full_name.toLowerCase().includes(searchQuery);
+                return friend.person_one_details?.full_name.toLowerCase().includes(searchQuery);
             }
         })
     }, [searchQuery, myFriends])
 
 
     return (
-        !myFriendsFetched ? <CustomSizeLoader className="py-52" /> :
-            <main className="p-10">
-                <div className="w-[50%]">
-                    <div className="flex px-5 py-3 rounded-3xl gap-3 items-center mb-10" style={{ backgroundColor: colors.inputBackground }}>
-                        <IoIosSearch size={30} color={colors.textSecondary} />
-                        <input type="text" className="w-full outline-none text-xl font-light text-[15px] placeholder:capitalize" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="search by username" />
+        !myFriendsFetched ? (
+            <CustomSizeLoader className="py-52" />
+        ) : (
+            <main className="p-6 flex justify-center">
+                <div className="w-full max-w-2xl">
+                    <div
+                        className="flex items-center gap-3 px-5 py-3 mb-8 rounded-full border border-gray-300 focus-within:ring-2 ring-blue-400 transition-all"
+                        style={{ backgroundColor: colors.inputBackground }}
+                    >
+                        <IoIosSearch size={24} color={colors.textSecondary} />
+                        <input
+                            type="text"
+                            className="w-full bg-transparent outline-none text-base placeholder:text-gray-500"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by username"
+                        />
                     </div>
-                    <div className="flex flex-col gap-3">
-                        {myFriends.length === 0 ? <NoFriends /> :
-                            filteredFriends.length === 0 ? <p className="text-center underline text-[13px]">No friends to show with this username</p> :
-                                filteredFriends.map((friend, index) => {
-                                    return <FriendCard friend={friend} key={index} />
-                                })
+
+                    <div className="flex flex-col gap-4">
+                        {
+                            myFriends.length === 0 ? (
+                                <NoFriends />
+                            ) : filteredFriends.length === 0 ? (
+                                <p className="text-center text-sm text-gray-500 italic">
+                                    No friends found with this name.
+                                </p>
+                            ) : (
+                                filteredFriends.map((friend, index) => (
+                                    <FriendCard friend={friend} key={index} />
+                                ))
+                            )
                         }
                     </div>
                 </div>
             </main>
-    )
+        )
+    );
+
 }

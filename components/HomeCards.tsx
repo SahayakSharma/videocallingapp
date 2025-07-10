@@ -5,22 +5,28 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function HomeCards() {
-    const router=useRouter();
-  return (
-    <div className='w-full grid grid-cols-1 lg:grid-cols-4 mt-10 gap-4'>
-        {
-            homeCards.map((card,index)=>(
-                <div className='px-6 py-8 rounded-[14px] flex flex-col justify-between gap-30 cursor-pointer' style={{backgroundColor:card.color}} key={index} onClick={()=>{
-                    router.push(card.route);
-                }}>
-                    <Image src={card.icon} alt='image here' width={30} height={30}/>
-                    <section className='w-full'>
-                        <h1 className='font-extrabold text-[30px]'>{card.title}</h1>
-                        <h1 className='font-medium text-[20px] capitalize'>{card.description}</h1>
+    const router = useRouter();
+    return (
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-10 gap-6">
+            {homeCards.map((card, index) => (
+                <div
+                    key={index}
+                    onClick={() => router.push(card.route)}
+                    className="group px-6 py-6 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col gap-6"
+                >
+                    <div
+                        className="w-12 h-12 flex items-center justify-center rounded-md"
+                        style={{ backgroundColor: `${card.color}22` }}
+                    >
+                        <Image src={card.icon} alt="icon" width={28} height={28} />
+                    </div>
+                    <section className="flex flex-col gap-1">
+                        <h1 className="text-xl font-semibold text-gray-900">{card.title}</h1>
+                        <p className="text-sm text-gray-500 capitalize">{card.description}</p>
                     </section>
                 </div>
-            ))
-        }
-    </div>
-  )
+            ))}
+        </div>
+    );
+
 }

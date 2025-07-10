@@ -18,26 +18,48 @@ export default function AddFriends() {
     }, [searchQuery, allUsers])
 
     return (
-        !allUsersFetched ? <CustomSizeLoader className="py-[200px]" /> :
-            <main className="p-10">
-                <section className="w-[50%]">
-                    <div className="flex px-5 py-3 rounded-3xl gap-3 items-center" style={{ backgroundColor: colors.inputBackground }}>
-                        <IoIosSearch size={30} color={colors.textSecondary}/>
-                        <input type="text" className="w-full outline-none text-xl font-light text-[15px] placeholder:capitalize" value={searchQuery} onChange={(e) => setSearchQusery(e.target.value)} placeholder="search by username"/>
+        !allUsersFetched ? (
+            <CustomSizeLoader className="py-[200px]" />
+        ) : (
+            <main className="p-6 flex justify-center">
+                <section className="w-full max-w-2xl">
+                    <div
+                        className="flex items-center gap-3 px-5 py-3 mb-4 rounded-full border border-gray-300 focus-within:ring-2 ring-blue-400 transition-all"
+                        style={{ backgroundColor: colors.inputBackground }}
+                    >
+                        <IoIosSearch size={24} color={colors.textSecondary} />
+                        <input
+                            type="text"
+                            className="w-full bg-transparent outline-none text-base placeholder:text-gray-500"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQusery(e.target.value)}
+                            placeholder="Search by username"
+                        />
                     </div>
-                    <div className="py-5 flex flex-col gap-2">
+                    {searchQuery === '' ? (
+                        <p className="text-sm text-gray-600 mb-4 font-medium">People you may know</p>
+                    ) : (
+                        <p className="text-sm text-gray-700 font-medium mb-4">
+                            Search results for <span className="text-blue-600">"{searchQuery}"</span>
+                        </p>
+                    )}
+                    <div className="flex flex-col gap-3">
                         {
-                            filteredUsersAccordingToQuery.map((user, index) => {
-                                return (
-                                    <UserCard User={user} key={index} />
-                                )
-                            })
+                            filteredUsersAccordingToQuery.map((user, index) => (
+                                <UserCard User={user} key={index} />
+                            ))
                         }
                     </div>
-                    {
-                        searchQuery!='' && filteredUsersAccordingToQuery.length==0 && <p className="text-center underline">No user found with this username</p>
-                    }
+                    {searchQuery !== '' && filteredUsersAccordingToQuery.length === 0 && (
+                        <p className="text-center text-sm text-gray-500 italic mt-6">
+                            No user found with this username.
+                        </p>
+                    )}
                 </section>
             </main>
-    )
+        )
+    );
+
+
+
 }
