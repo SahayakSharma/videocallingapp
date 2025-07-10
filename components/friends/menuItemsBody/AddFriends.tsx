@@ -40,7 +40,7 @@ export default function AddFriends() {
                         <p className="text-sm text-gray-600 mb-4 font-medium">People you may know</p>
                     ) : (
                         <p className="text-sm text-gray-700 font-medium mb-4">
-                            Search results for <span className="text-blue-600">"{searchQuery}"</span>
+                            Search results for <span className="text-blue-600">{`"${searchQuery}"`}</span>
                         </p>
                     )}
                     <div className="flex flex-col gap-3">

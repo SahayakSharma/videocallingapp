@@ -30,7 +30,7 @@ export default function MyRequets(){
 
         <section>
           <p className="text-lg font-semibold mb-4" style={{ color: colors.text }}>
-            Requests You've Sent
+            {`Requests You've Sent`}
           </p>
           <div className="flex flex-col gap-3">
             {
